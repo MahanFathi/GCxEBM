@@ -20,7 +20,7 @@ from brax.envs import env
 
 
 class Ant(env.Env):
-  """Trains an ant to run in the +x direction."""
+    """Trains an ant to run in the +x direction."""
 
     def __init__(self, legacy_spring=False, **kwargs):
         config = _SYSTEM_CONFIG_SPRING if legacy_spring else _SYSTEM_CONFIG
