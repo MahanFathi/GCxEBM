@@ -4,6 +4,7 @@ import time
 
 from absl import logging
 from brax import envs
+from brax.io import model
 from brax.training import distribution
 from brax.training import normalization
 from brax.training import pmap
@@ -304,48 +305,55 @@ def train(
         logging.info('starting iteration %s %s', it, time.time() - xt)
         t = time.time()
 
-        if process_id == 0:
-            eval_state, key_debug = (
-                run_eval(eval_first_state, key_debug,
-                         training_state.params['policy'],
-                         training_state.normalizer_params))
-            eval_state.completed_episodes.block_until_ready()
-            eval_walltime += time.time() - t
-            eval_sps = (episode_length * eval_first_state.core.reward.shape[0] /
-                        (time.time() - t))
-            avg_episode_length = (
-                    eval_state.completed_episodes_steps / eval_state.completed_episodes)
-            metrics = dict(
-                dict({
-                    f'eval/episode_{name}': value / eval_state.completed_episodes
-                    for name, value in eval_state.completed_episodes_metrics.items()
-                }),
-                **dict({
-                    f'losses/{name}': jnp.mean(value)
-                    for name, value in losses.items()
-                }),
-                **dict({
-                    'eval/completed_episodes': eval_state.completed_episodes,
-                    'eval/avg_episode_length': avg_episode_length,
-                    'speed/sps': sps,
-                    'speed/eval_sps': eval_sps,
-                    'speed/training_walltime': training_walltime,
-                    'speed/eval_walltime': eval_walltime,
-                    'speed/timestamp': training_walltime,
-                }))
-            logging.info(metrics)
-            if log_save_params:
-                save_params(
-                    (normalizer_params, policy_params),
-                    logger.get_logdir_path(cfg),
-                    str(int(training_state.normalizer_params[0][0])),
-                )
-            if progress_fn:
-                progress_fn(int(training_state.normalizer_params[0][0]) * action_repeat,
-                            metrics)
+    if process_id == 0:
+        eval_state, key_debug = (
+            run_eval(eval_first_state, key_debug,
+                     training_state.params['policy'],
+                     training_state.normalizer_params))
+        eval_metrics = eval_state.info['eval_metrics']
+        eval_metrics.completed_episodes.block_until_ready()
+        eval_walltime += time.time() - t
+        eval_sps = (episode_length * eval_first_state.reward.shape[0] /
+                    (time.time() - t))
+        avg_episode_length = (
+            eval_metrics.completed_episodes_steps /
+            eval_metrics.completed_episodes)
+        metrics = dict(
+            dict({
+                f'eval/episode_{name}': value / eval_metrics.completed_episodes
+                for name, value in eval_metrics.completed_episodes_metrics.items()
+            }),
+            **dict({
+                f'losses/{name}': jnp.mean(value)
+                for name, value in losses.items()
+            }),
+            **dict({
+                'eval/completed_episodes': eval_metrics.completed_episodes,
+                'eval/avg_episode_length': avg_episode_length,
+                'speed/sps': sps,
+                'speed/eval_sps': eval_sps,
+                'speed/training_walltime': training_walltime,
+                'speed/eval_walltime': eval_walltime,
+                'speed/timestamp': training_walltime,
+            }))
 
-        if it == log_frequency:
-            break
+        logging.info(metrics)
+
+        current_step = int(training_state.normalizer_params[0][0]) * action_repeat
+        if progress_fn:
+            progress_fn(current_step, metrics)
+
+        if cfg.LOG.SAVE_PARAMS:
+            normalizer_params = jax.tree_map(lambda x: x[0],
+                                             training_state.normalizer_params)
+            policy_params = jax.tree_map(lambda x: x[0],
+                                         training_state.params['policy'])
+            params = normalizer_params, policy_params
+            path = os.path.join(logger.get_logdir_path(cfg), f'ppo_{current_step}.pkl')
+            model.save_params(path, params)
+
+    if it == log_frequency:
+      break
 
         t = time.time()
         previous_step = training_state.normalizer_params[0][0]
