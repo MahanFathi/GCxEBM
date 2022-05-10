@@ -29,7 +29,7 @@ _C.POLICY.CLASS = "EBMPolicy"
 # ENERGY-BASED MODEL
 # ---------------------------------------------------------------------------- #
 _C.EBM = ml_collections.ConfigDict()
-_C.EBM.ARCH = "arch1" # {"arch0": simple_feed_forward, "arch1": multipe_mlps}
+_C.EBM.ARCH = "arch0" # {"arch0": simple_feed_forward, "arch1": multipe_mlps}
 _C.EBM.ARCH0 = ml_collections.ConfigDict()
 _C.EBM.ARCH0.LAYERS = [256, 256, 128, 128]
 _C.EBM.ARCH1 = ml_collections.ConfigDict()
