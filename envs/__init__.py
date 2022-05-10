@@ -1,4 +1,7 @@
 from typing import Callable, Optional
+
+from brax.envs.env import Env
+
 from .envs import ant
 from . import wrappers
 
