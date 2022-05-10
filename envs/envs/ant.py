@@ -28,7 +28,7 @@ class Ant(env.Env):
         config = _SYSTEM_CONFIG_SPRING if legacy_spring else _SYSTEM_CONFIG
         super().__init__(config=config, **kwargs)
 
-        self.goal_size = 4
+        self.goal_size = 2
 
     def reset(self, rng: jp.ndarray) -> env.State:
         """Resets the environment to an initial state."""
