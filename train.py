@@ -80,18 +80,19 @@ def train(
     core_env = environment_fn(
         action_repeat=action_repeat,
         batch_size=num_envs // local_devices_to_use // process_count,
-        episode_length=episode_length,
-    )
+        episode_length=episode_length)
     key_envs = jax.random.split(key_env, local_devices_to_use)
-    step_fn = core_env.step
-    first_state = jax.tree_multimap(lambda *args: jnp.stack(args),
-                                    *[core_env.reset(key) for key in key_envs])
+    step_fn = jax.jit(core_env.step)
+    reset_fn = jax.jit(jax.vmap(core_env.reset))
+    first_state = reset_fn(key_envs)
 
-    core_eval_env = environment_fn(
+    eval_env = environment_fn(
         action_repeat=action_repeat,
         batch_size=num_eval_envs,
-        episode_length=episode_length)
-    eval_first_state, eval_step_fn = wrap_for_eval(core_eval_env, key_eval)
+        episode_length=episode_length,
+        eval_metrics=True)
+    eval_step_fn = jax.jit(eval_env.step)
+    eval_first_state = jax.jit(eval_env.reset)(key_eval)
 
     # NETWORKS
     parametric_action_distribution = distribution.NormalTanhDistribution(
@@ -164,7 +165,7 @@ def train(
             jax.tree_map(lambda x: x[0], normalizer_params), state.obs)
         logits = policy_model.apply(policy_params, normalized_obs, goal, key_action_logits)
         actions = parametric_action_distribution.sample(logits, key_sample)
-        nstate = step_fn(state, postprocessed_actions, goal)
+        nstate = eval_step_fn(state, postprocessed_actions, goal)
         return (nstate, goal, policy_params, normalizer_params, key), ()
 
     def generate_unroll(carry, unused_target_t):

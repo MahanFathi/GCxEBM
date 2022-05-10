@@ -143,7 +143,7 @@ class EvalWrapper(brax_env.Wrapper):
             raise ValueError(
                 f'Incorrect type for state_metrics: {type(state_metrics)}')
         del state.info['eval_metrics']
-        nstate = self.env.step(state, action)
+        nstate = self.env.step(state, action, goal)
         nstate.metrics['reward'] = nstate.reward
         # steps stores the highest step reached when done = True, and then
         # the next steps becomes action_repeat
