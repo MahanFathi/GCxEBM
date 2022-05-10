@@ -15,6 +15,7 @@
 """Trains an ant to run in the +/-x +/-y directions."""
 
 import jax
+from jax import numpy as jnp
 import brax
 from brax import jumpy as jp
 from brax.envs import env
@@ -49,7 +50,7 @@ class Ant(env.Env):
 
     def sample_goal(self, rng: jp.ndarray) -> jp.ndarray:
         index = jax.random.choice(rng, 4)
-        return jp.array([
+        return jnp.array([
             [ 1., 0.], # +x
             [-1., 0.], # -x
             [.0,  1.], # +y
