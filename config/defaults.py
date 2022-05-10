@@ -87,5 +87,16 @@ _C.TRAIN.PPO.GAE_LAMBDA = 0.95
 _C.TRAIN.PPO.EPSILON = 0.3
 
 
+# ---------------------------------------------------------------------------- #
+# LOGGING
+# ---------------------------------------------------------------------------- #
+_C.LOG = ml_collections.ConfigDict()
+_C.LOG.FREQUENCY = 20
+_C.LOG.TO_FILE = True # is allowed to create files
+_C.LOG.SAVE_PARAMS = True
+_C.LOG.LOG_DIR = "logs"
+
+
+
 def get_config():
     return _C
