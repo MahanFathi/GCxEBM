@@ -133,7 +133,7 @@ def train(
         get_rl_loss(cfg.TRAIN.LOSS_FN),
         cfg=cfg,
         parametric_action_distribution=parametric_action_distribution,
-        policy_apply=policy_model.apply,
+        policy_apply=policy_model.apply_sequence,
         value_apply=value_model.apply,
     )
     grad_loss = jax.grad(loss_fn, has_aux=True)
