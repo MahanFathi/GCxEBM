@@ -48,7 +48,7 @@ class Ant(env.Env):
         return env.State(qp, obs, reward, done, metrics)
 
     def sample_goal(self, rng: jp.ndarray) -> jp.ndarray:
-        index = jax.random.choice(key, 4)
+        index = jax.random.choice(rng, 4)
         return jp.array([
             [ 1., 0.], # +x
             [-1., 0.], # -x
