@@ -199,7 +199,7 @@ def train(
     def run_eval(state, key, policy_params,
                  normalizer_params) -> Tuple[envs.State, PRNGKey]:
         key, key_goal = jax.random.split(key)
-        goal = core_eval_env.sample_goal(key_goal)
+        goal = eval_env.sample_goal(key_goal)
         policy_params = jax.tree_map(lambda x: x[0], policy_params)
         (state, _, _, _, key), _ = jax.lax.scan(
             do_one_step_eval, (state, goal, policy_params, normalizer_params, key), (),
