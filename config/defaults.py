@@ -5,7 +5,7 @@ import ml_collections
 # ---------------------------------------------------------------------------- #
 _C = ml_collections.ConfigDict()
 _C.EXP_NAME = ""
-_C.seed = 0
+_C.SEED = 0
 _C.WANDB = True
 _C.DEBUG = False
 _C.MOCK_TPU = False
