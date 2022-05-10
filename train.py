@@ -173,7 +173,7 @@ def train(
         state, normalizer_params, policy_params, key = carry
         key, key_goal = jax.random.split(key)
         goal = core_env.sample_goal(key_goal)
-        (state, _, _, key), data = jax.lax.scan(
+        (state, _, _, _, key), data = jax.lax.scan(
             do_one_step, (state, goal, normalizer_params, policy_params, key), (),
             length=unroll_length)
         # data: (unroll_length, batch_size, [obs_size])
