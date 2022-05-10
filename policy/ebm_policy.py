@@ -11,7 +11,7 @@ from util.types import *
 class EBMPolicy(BasePolicy):
 
     def __init__(self, cfg: FrozenConfigDict, env: env.Env, target_action_size: int):
-        super(EBMPolicy, self).__init__(cfg, env)
+        super(EBMPolicy, self).__init__(cfg, env, target_action_size)
         self.ebm = EBM(cfg, env, env.goal_size, target_action_size) # options = goals for now
 
 
