@@ -14,5 +14,5 @@ _registry = {
     },
 }
 
-def build_ebm_net(cfg: FrozenConfigDict, observation_size: int, action_size: int):
-    return _registry["ebm"][cfg.EBM.ARCH](cfg, observation_size, action_size)
+def build_ebm_net(cfg: FrozenConfigDict, observation_size: int, option_size: int, action_size: int):
+    return _registry["ebm"][cfg.EBM.ARCH](cfg, observation_size, option_size, action_size)

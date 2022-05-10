@@ -57,14 +57,14 @@ def make_mlp(layer_sizes: Sequence[int],
     return model
 
 
-def make_ebm_model_arch0(cfg: FrozenConfigDict, observation_size: int, action_size: int):
+def make_ebm_model_arch0(cfg: FrozenConfigDict, observation_size: int, option_size: int, action_size: int):
 
     def make_apply_fn(module):
         return lambda params, s, z, a: module.apply(params, jnp.concatenate([s, z, a], axis=-1))
 
     ebm_net = make_mlp(
         list(cfg.EBM.ARCH0.LAYERS) + [1],
-        observation_size + cfg.EBM.OPTION_SIZE + action_size,
+        observation_size + option_size + action_size,
     )
 
     return Model(
@@ -73,7 +73,7 @@ def make_ebm_model_arch0(cfg: FrozenConfigDict, observation_size: int, action_si
     )
 
 
-def make_ebm_model_arch1(cfg: FrozenConfigDict, observation_size: int, action_size: int):
+def make_ebm_model_arch1(cfg: FrozenConfigDict, observation_size: int, option_size: int, action_size: int):
 
     @dataclasses.dataclass
     class Arch1Params:
@@ -104,7 +104,7 @@ def make_ebm_model_arch1(cfg: FrozenConfigDict, observation_size: int, action_si
     )
     g = make_mlp(
         list(cfg.EBM.ARCH1.G_LAYERS) + [1],
-        cfg.EBM.OPTION_SIZE + list(cfg.EBM.ARCH1.F_LAYERS)[-1],
+        option_size + list(cfg.EBM.ARCH1.F_LAYERS)[-1],
     )
 
     return Model(

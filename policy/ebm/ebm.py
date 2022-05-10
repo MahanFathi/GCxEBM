@@ -36,7 +36,7 @@ class EBM(object):
 
 
         # build net
-        self._ebm_net = build_ebm_net(cfg, self.state_size, self.target_action_size)
+        self._ebm_net = build_ebm_net(cfg, self.state_size, self.option_size, self.target_action_size)
 
         # define derivatives
         self._dedz = jax.jit(jax.vmap(jax.grad(self.apply, 2), in_axes=(None, 0, 0, 0)))
