@@ -11,7 +11,7 @@ import flax
 import jax
 import jax.numpy as jnp
 import optax
-from yacs.config import CfgNode
+from ml_collections import FrozenConfigDict
 
 from policy import make_policy
 from rl import get_rl_loss
@@ -21,7 +21,7 @@ from util.types import *
 
 
 def train(
-        cfg: CfgNode,
+        cfg: FrozenConfigDict,
         environment_fn: Callable[..., envs.Env],
         progress_fn: Optional[Callable[[int, Dict[str, Any]], None]] = None,
         seed: int = 0,
