@@ -46,8 +46,6 @@ def train(
     log_save_params = cfg.LOG.SAVE_PARAMS and cfg.LOG.TO_FILE
 
     assert batch_size * num_minibatches % num_envs == 0
-    assert unroll_length % dmp_unroll_length == 0
-    assert episode_length // action_repeat % dmp_unroll_length == 0  # TODO: not necessary
     xt = time.time()
 
     # PROCESS BOOKKEEPING
