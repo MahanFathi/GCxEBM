@@ -15,7 +15,6 @@ from ml_collections import FrozenConfigDict
 
 from policy import make_policy
 from rl import get_rl_loss
-from util.eval import EvalEnvState, wrap_for_eval
 from util import net, logger
 from util.types import *
 
