@@ -102,7 +102,7 @@ def train(
         core_env,
         parametric_action_distribution.param_size,
     )
-    value_model = net.make_model(
+    value_model = net.make_mlp(
         cfg.VALUE_NET.FEATURES + [1],
         core_env.observation_size + core_env.goal_size, # we also need to train a universal vf
     )
