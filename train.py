@@ -157,7 +157,7 @@ def train(
         )
 
     def do_one_step_eval(carry, unused_target_t):
-        state, goal, normalizer_params, policy_params, key = carry
+        state, goal, policy_params, normalizer_params, key = carry
         key, key_sample = jax.random.split(key)
         # TODO: Make this nicer ([0] comes from pmapping).
         obs = obs_normalizer_apply_fn(
