@@ -10,6 +10,7 @@ from util.types import *
 
 
 class BasePolicy(ABC):
+    """Base policy"""
 
     def __init__(self, cfg: FrozenConfigDict, env: env.Env, target_action_size: int):
         self.cfg = cfg

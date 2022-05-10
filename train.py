@@ -44,7 +44,6 @@ def train(
     num_eval_envs = cfg.TRAIN.NUM_EVAL_ENVS
     log_frequency = cfg.LOG.FREQUENCY
     log_to_file = cfg.LOG.TO_FILE
-    log_save_params = cfg.LOG.SAVE_PARAMS and cfg.LOG.TO_FILE
 
     assert batch_size * num_minibatches % num_envs == 0
     xt = time.time()

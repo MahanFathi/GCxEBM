@@ -2,7 +2,6 @@ import os
 from typing import Union, Mapping
 
 from absl import app
-from absl import flags
 from absl import logging
 
 import wandb

@@ -24,6 +24,7 @@ _C.ENV.TIMESTEP = 0.05
 # ---------------------------------------------------------------------------- #
 _C.POLICY = ml_collections.ConfigDict()
 _C.POLICY.CLASS = "EBMPolicy"
+_C.POLICY.MLP_LAYERS = [256, 256, 256, 128, 128]
 
 # ---------------------------------------------------------------------------- #
 # ENERGY-BASED MODEL
@@ -91,7 +92,7 @@ _C.TRAIN.PPO.EPSILON = 0.3
 # LOGGING
 # ---------------------------------------------------------------------------- #
 _C.LOG = ml_collections.ConfigDict()
-_C.LOG.FREQUENCY = 20
+_C.LOG.FREQUENCY = 200
 _C.LOG.TO_FILE = True # is allowed to create files
 _C.LOG.SAVE_PARAMS = True
 

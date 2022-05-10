@@ -9,6 +9,7 @@ from util.types import *
 
 
 class EBMPolicy(BasePolicy):
+    """Energy-based Model of the policy"""
 
     def __init__(self, cfg: FrozenConfigDict, env: env.Env, target_action_size: int):
         super(EBMPolicy, self).__init__(cfg, env, target_action_size)
