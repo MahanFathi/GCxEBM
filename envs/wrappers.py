@@ -35,7 +35,7 @@ class VectorWrapper(brax_env.Wrapper):
 
     def sample_goal(self, rng: jp.ndarray) -> jp.ndarray:
         rng = jp.random_split(rng, self.batch_size)
-        return jp.vmap(self.sample_goal)(rng)
+        return jp.vmap(self.env.sample_goal)(rng)
 
     def step(self, state: brax_env.State, action: jp.ndarray, goal: jp.ndarray) -> brax_env.State:
         return jp.vmap(self.env.step)(state, action, goal)
@@ -49,7 +49,7 @@ class VmapWrapper(brax_env.Wrapper):
 
     def sample_goal(self, rng: jp.ndarray) -> jp.ndarray:
         rng = jp.random_split(rng, self.batch_size)
-        return jp.vmap(self.sample_goal)(rng)
+        return jp.vmap(self.env.sample_goal)(rng)
 
     def step(self, state: brax_env.State, action: jp.ndarray, goal:jp.ndarray) -> brax_env.State:
         return jp.vmap(self.env.step)(state, action, goal)

@@ -94,7 +94,6 @@ _C.LOG = ml_collections.ConfigDict()
 _C.LOG.FREQUENCY = 20
 _C.LOG.TO_FILE = True # is allowed to create files
 _C.LOG.SAVE_PARAMS = True
-_C.LOG.LOG_DIR = "logs"
 
 
 
