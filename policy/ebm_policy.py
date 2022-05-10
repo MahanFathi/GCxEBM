@@ -24,7 +24,7 @@ class EBMPolicy(BasePolicy):
         batch_size, observation_size = observation.shape
 
         key_init_a, key_infer_a = jax.random.split(key)
-        a_init = jax.random.normal(key_init_a, (batch_size, self.env.action_size))
+        a_init = jax.random.normal(key_init_a, (batch_size, self.target_action_size))
 
         a = self.ebm.infer_a(params, observation, goal, a_init, key_infer_a, train_mode)
 
