@@ -4,7 +4,7 @@ import jax
 from jax import numpy as jnp
 from ml_collections import FrozenConfigDict
 
-from envs.base_env import BaseEnv
+from brax.envs.env import Env
 from util.net import build_ebm_net
 from util.types import *
 
@@ -17,7 +17,7 @@ class EBM(object):
     def __init__(
             self,
             cfg: FrozenConfigDict,
-            env: BaseEnv,
+            env: Env,
             option_size: int,
             target_action_size: int = None
     ):
