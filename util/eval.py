@@ -46,12 +46,12 @@ def wrap_for_eval(core_env: envs.Env,
             completed_episodes=completed_episodes,
             completed_episodes_steps=completed_episodes_steps)
 
-      first_state = EvalEnvState(
-          core=first_core,
-          qp=first_core.qp,
-          current_episode_metrics=jax.tree_map(jnp.zeros_like, first_core.metrics),
-          completed_episodes_metrics=jax.tree_map(
-            lambda x: jnp.zeros_like(jnp.sum(x)), first_core.metrics),
-          completed_episodes=jnp.zeros(()),
-          completed_episodes_steps=jnp.zeros(()))
-      return first_state, jax.jit(step)
+    first_state = EvalEnvState(
+        core=first_core,
+        qp=first_core.qp,
+        current_episode_metrics=jax.tree_map(jnp.zeros_like, first_core.metrics),
+        completed_episodes_metrics=jax.tree_map(
+          lambda x: jnp.zeros_like(jnp.sum(x)), first_core.metrics),
+        completed_episodes=jnp.zeros(()),
+        completed_episodes_steps=jnp.zeros(()))
+    return first_state, jax.jit(step)
