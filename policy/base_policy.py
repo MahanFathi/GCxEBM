@@ -15,7 +15,7 @@ class BasePolicy(ABC):
         self.cfg = cfg
         self.env = env
         self.target_action_size = target_action_size
-        self._apply_sequence = jax.vmap(self.apply, in_axes=(None, 0, 0, None, None))
+        self._apply_sequence = jax.vmap(self.apply, in_axes=(None, 0, 0, 0, None))
 
 
     def init(self, rng: PRNGKey):
