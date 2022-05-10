@@ -14,6 +14,7 @@
 
 """Trains an ant to run in the +/-x +/-y directions."""
 
+import jax
 import brax
 from brax import jumpy as jp
 from brax.envs import env
@@ -48,7 +49,7 @@ class Ant(env.Env):
 
     def sample_goal(self, rng: jp.ndarray) -> jp.ndarray:
         index = jax.random.choice(key, 4)
-        return jnp.array([
+        return jp.array([
             [ 1., 0.], # +x
             [-1., 0.], # -x
             [.0,  1.], # +y
@@ -63,7 +64,7 @@ class Ant(env.Env):
         # NOTE: goal lies in the grid of:
         #   [-1., 0.], [1., 0.], [0., 1.], [0., -1.].
         displacement_xy = qp.pos[0, :2] - state.qp.pos[0, :2]
-        goal_reward = jnp.sum(displacement_xy * goal) / self.sys.config.dt
+        goal_reward = jp.sum(displacement_xy * goal) / self.sys.config.dt
         ctrl_cost = .5 * jp.sum(jp.square(action))
         contact_cost = (0.5 * 1e-3 *
                         jp.sum(jp.square(jp.clip(info.contact.vel, -1, 1))))
