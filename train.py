@@ -158,7 +158,7 @@ def train(
 
     def do_one_step_eval(carry, unused_target_t):
         state, goal, policy_params, normalizer_params, key = carry
-        key, key_sample = jax.random.split(key)
+        key, key_sample, key_action_logits = jax.random.split(key, 3)
         # TODO: Make this nicer ([0] comes from pmapping).
         normalized_obs = obs_normalizer_apply_fn(
             jax.tree_map(lambda x: x[0], normalizer_params), state.obs)
