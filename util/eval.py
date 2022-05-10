@@ -11,6 +11,7 @@ from util.types import *
 
 
 Action = jnp.ndarray
+Goal = jnp.ndarray
 EvalStepFn = Callable[[EvalEnvState, Action], EvalEnvState]
 
 
@@ -20,8 +21,8 @@ def wrap_for_eval(core_env: envs.Env,
     first_core = core_env.reset(rng)
     first_core.metrics['reward'] = first_core.reward
 
-    def step(state: EvalEnvState, action: Action) -> EvalEnvState:
-        core = core_env.step(state.core, action)
+    def step(state: EvalEnvState, action: Action, goal: Goal) -> EvalEnvState:
+        core = core_env.step(state.core, action, goal)
         core.metrics['reward'] = core.reward
         # steps stores the highest step reached when done = True, and then
         # the next steps becomes action_repeat

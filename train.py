@@ -157,15 +157,15 @@ def train(
         )
 
     def do_one_step_eval(carry, unused_target_t):
-        state, policy_params, normalizer_params, key = carry
+        state, goal, normalizer_params, policy_params, key = carry
         key, key_sample = jax.random.split(key)
         # TODO: Make this nicer ([0] comes from pmapping).
         obs = obs_normalizer_apply_fn(
             jax.tree_map(lambda x: x[0], normalizer_params), state.obs)
-        logits = policy_model.apply(policy_params, obs)
+        logits = policy_model.apply(policy_params, normalized_obs, goal, key_action_logits)
         actions = parametric_action_distribution.sample(logits, key_sample)
-        nstate = eval_step_fn(state, actions)
-        return (nstate, policy_params, normalizer_params, key), ()
+        nstate = step_fn(state, postprocessed_actions, goal)
+        return (nstate, goal, policy_params, normalizer_params, key), ()
 
     def generate_unroll(carry, unused_target_t):
         state, normalizer_params, policy_params, key = carry
@@ -197,12 +197,13 @@ def train(
 
     @jax.jit
     def run_eval(state, key, policy_params,
-                 normalizer_params) -> Tuple[EvalEnvState, PRNGKey]:
-        normalizer_params = jax.tree_map(lambda x: x[0], normalizer_params)
+                 normalizer_params) -> Tuple[envs.State, PRNGKey]:
+        key, key_goal = jax.random.split(key)
+        goal = core_eval_env.sample_goal(key_goal)
         policy_params = jax.tree_map(lambda x: x[0], policy_params)
-        (state, _, _, key), _ = jax.lax.scan(
-            generate_dmp_unroll_eval, (state, normalizer_params, policy_params, key), (),
-            length=episode_length // action_repeat // dmp_unroll_length)
+        (state, _, _, _, key), _ = jax.lax.scan(
+            do_one_step_eval, (state, goal, policy_params, normalizer_params, key), (),
+            length=episode_length // action_repeat)
         return state, key
 
     def update_model(carry, data):
