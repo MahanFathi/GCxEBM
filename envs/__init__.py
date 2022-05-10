@@ -1,3 +1,4 @@
+import functools
 from typing import Callable, Optional
 
 from brax.envs.env import Env
