@@ -164,7 +164,7 @@ def train(
         # TODO: Make this nicer ([0] comes from pmapping).
         normalized_obs = obs_normalizer_apply_fn(
             jax.tree_map(lambda x: x[0], normalizer_params), state.obs)
-        logits = policy_model.apply(policy_params, normalized_obs, goal, key_action_logits)
+        logits = policy_model.apply(policy_params, normalized_obs, goal, key_action_logits, train_mode=False)
         actions = parametric_action_distribution.sample(logits, key_sample)
         nstate = eval_step_fn(state, actions, goal)
         return (nstate, goal, policy_params, normalizer_params, key), ()

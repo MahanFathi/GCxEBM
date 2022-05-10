@@ -62,7 +62,7 @@ _C.VALUE_NET.LR = 1e-3
 # ---------------------------------------------------------------------------- #
 _C.TRAIN = ml_collections.ConfigDict()
 _C.TRAIN.LOSS_FN = "ppo_loss"
-_C.TRAIN.NUM_TIMESTEPS = 1e9
+_C.TRAIN.NUM_TIMESTEPS = 1e8
 _C.TRAIN.EPISODE_LENGTH = 1000
 _C.TRAIN.NUM_UPDATE_EPOCHS = 4
 _C.TRAIN.ACTION_REPEAT = 1
