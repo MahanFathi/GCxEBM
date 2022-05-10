@@ -31,7 +31,7 @@ _C.POLICY.CLASS = "EBMPolicy"
 _C.EBM = ml_collections.ConfigDict()
 _C.EBM.ARCH = "arch0" # {"arch0": simple_feed_forward, "arch1": multipe_mlps}
 _C.EBM.ARCH0 = ml_collections.ConfigDict()
-_C.EBM.ARCH0.LAYERS = [256, 256, 128, 128]
+_C.EBM.ARCH0.LAYERS = [256, 256, 256, 128, 128]
 _C.EBM.ARCH1 = ml_collections.ConfigDict()
 _C.EBM.ARCH1.F_LAYERS = [128, 128, 64, 64]
 _C.EBM.ARCH1.G_LAYERS = [128, 128, 64, 64]
@@ -62,7 +62,7 @@ _C.VALUE_NET.LR = 1e-3
 # ---------------------------------------------------------------------------- #
 _C.TRAIN = ml_collections.ConfigDict()
 _C.TRAIN.LOSS_FN = "ppo_loss"
-_C.TRAIN.NUM_TIMESTEPS = 1e7
+_C.TRAIN.NUM_TIMESTEPS = 1e9
 _C.TRAIN.EPISODE_LENGTH = 1000
 _C.TRAIN.NUM_UPDATE_EPOCHS = 4
 _C.TRAIN.ACTION_REPEAT = 1
