@@ -87,43 +87,5 @@ _C.TRAIN.PPO.GAE_LAMBDA = 0.95
 _C.TRAIN.PPO.EPSILON = 0.3
 
 
-# ---------------------------------------------------------------------------- #
-# EBM TRAIN
-# ---------------------------------------------------------------------------- #
-_C.TRAIN = ml_collections.ConfigDict()
-_C.TRAIN.MAX_DEVICES_PER_HOST = 8
-_C.TRAIN.EBM = ml_collections.ConfigDict()
-_C.TRAIN.EBM.WARMSTART_INFERENCE = True
-_C.TRAIN.EBM.LOSS_NAME = "loss_L2" # from [loss_ML, loss_ML_KL, loss_L2, loss_L2_KL]
-_C.TRAIN.EBM.DATA_SIZE = 1e8 # in case of limited experience
-_C.TRAIN.EBM.LEARNING_RATE = 1e-3
-_C.TRAIN.EBM.NUM_EPOCHS = 10000
-_C.TRAIN.EBM.NUM_UPDATE_EPOCHS = 8
-_C.TRAIN.EBM.NUM_SAMPLERS = 8
-_C.TRAIN.EBM.BATCH_SIZE = 2 ** 13
-_C.TRAIN.EBM.EVAL_BATCH_SIZE = 2 ** 12
-_C.TRAIN.EBM.NUM_MINIBATCHES = 8
-_C.TRAIN.EBM.NORMALIZE_OBSERVATIONS = False
-_C.TRAIN.EBM.NORMALIZE_ACTIONS = False # needs propper support in the code
-_C.TRAIN.EBM.LOG_FREQUENCY = 1000
-_C.TRAIN.EBM.LOG_SAVE_PARAMS = False
-_C.TRAIN.EBM.DISCOUNT = 0.95
-_C.TRAIN.EBM.LOSS_KL_COEFF = 1.0
-
-# ---------------------------------------------------------------------------- #
-# batch guide:
-# ---------------------------------------------------------------------------- #
-#   gradient are calculated based on batches of size:
-#       `TRAIN.EBM.BATCH_SIZE // TRAIN.EBM.NUM_MINIBATCHES`.
-#   this has been made possible by pmapping batches of size:
-#       `TRAIN.EBM.BATCH_SIZE // #local_devices // TRAIN.EBM.NUM_MINIBATCHES`,
-#   across `#local_devices` local devices per CPU host/node, and
-#   calculating the mean of grad via `jax.lax.pmean`.
-#
-#   This process is repeated for `TRAIN.EBM.NUM_UPDATE_EPOCHS`
-#   times per epoch and we run `TRAIN.EBM.NUM_EPOCHS` epochs
-#   in total.
-# ---------------------------------------------------------------------------- #
-
 def get_config():
     return _C
