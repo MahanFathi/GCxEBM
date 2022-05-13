@@ -20,7 +20,7 @@ class EBMPolicy(BasePolicy):
         return self.ebm.init(rng)
 
 
-    def apply(self, params: Params, observation: jnp.ndarray, goal: jnp.ndarray, key: PRNGKey, train_mode: bool = True) -> jnp.ndarray:
+    def apply(self, params: Params, observation: jnp.ndarray, goal: jnp.ndarray, key: PRNGKey, train_mode: bool = None) -> jnp.ndarray:
 
         batch_size, observation_size = observation.shape
 
